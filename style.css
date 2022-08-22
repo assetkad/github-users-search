@@ -25,6 +25,13 @@
     width: 100%;
 }
 
+.users {
+    flex: 1;
+}
+
+.user-info{
+    flex: 1;
+}
 
 .users-list {
     display: flex;
@@ -59,4 +66,18 @@
     height: 40px;
     line-height: 38px;
     padding: 0 15px;
+}
+
+.block-list{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+
+}
+
+.block-list-item{
+    list-style: none;
+    padding: 0;
+    margin: 5px;
 }

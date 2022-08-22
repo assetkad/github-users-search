@@ -1,5 +1,6 @@
 export class View {
-    constructor() {
+    constructor(api) {
+        this.api = api;
         this.app = document.getElementById('app');
 
         this.title = this.createElement('h1', 'title');
@@ -46,7 +47,7 @@ export class View {
 
     createPrevUser(userData) {
         const userPrev = this.createElement('li', 'user-small');
-        userPrev.addEventListener('click', ()=> this.showUserData(userData));
+        userPrev.addEventListener('click', () => this.showUserData(userData));
 
         userPrev.innerHTML = `<img src="${userData.avatar_url}" alt="${userData.login}">
                             <span>${userData.login}</span>`;
@@ -55,17 +56,47 @@ export class View {
 
     }
 
-    showUserData(data) {
+    showUserData(userData) {
         const user = this.createElement('div', 'user');
 
+        this.userInfo.innerHTML = '';
+        this.api.searchUserData(userData.login)
+            .then(data => {
+                const [followers, following, repos] = data;
+                const followersList = this.createUserDataBlock(followers, 'Followers');
+                const followingList = this.createUserDataBlock(following, 'Following');
+                const reposList = this.createUserDataBlock(repos, 'Repos');
 
-        user.innerHTML = `<img src="${data.avatar_url} alt="${data.login}">`;
+                user.innerHTML = `<img src="${userData.avatar_url} alt="${userData.login}">
+                <h2>${userData.login}</h2>
+                ${followersList}
+                ${followingList}
+                ${reposList}`;
+                console.log(data);
+            });
 
 
         this.userInfo.append(user);
+    }
+
+    createUserDataBlock(list, title) {
+        const block = this.createElement('div', 'block');
+        const blockTitle = this.createElement('h2', 'title');
+        const blockList = this.createElement('ul', 'block-list');
+
+        blockTitle.textContent = title;
+
+        list.forEach(item => {
+            blockList.innerHTML += `<li class="block-list-item">
+            <a href="${item.html_url}" target="_blank">${item.login ? item.login : item.name}</a>
+            </li>`;
+        });
+
+        block.append(blockTitle);
+        block.append(blockList);
 
 
-
+        return block.innerHTML;
     }
 
     toggleViewUserLoadMoreBtn(isShow) {

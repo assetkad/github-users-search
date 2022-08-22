@@ -9,4 +9,15 @@ export class Api {
     async searchUsers(inpValue, page) {
         return await fetch(`${URL}/search/users?q=${inpValue}&per_page=${USERS_PER_PAGE}&page=${page}`).then((res) => res.json())
     }
+
+    searchUserData(user) {
+        const urls = [
+            `${URL}/users/${user}/followers`,
+            `${URL}/users/${user}/following`,
+            `${URL}/users/${user}/repos`,
+        ];
+        const requests = urls.map(url => fetch(url));
+        return Promise.all(requests)
+            .then(response => Promise.all(response.map(resp => resp.json())));
+    }
 }
