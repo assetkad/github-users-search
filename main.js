@@ -1,6 +1,8 @@
 import {View} from "./modules/view.js";
 import {Api} from "./modules/api.js";
 import {Search} from "./modules/search.js";
+import {Log} from "./modules/log.js";
+
 
 
 class App {
@@ -10,8 +12,10 @@ class App {
 }
 
 const api = new Api();
+const log = new Log();
 const view = new View();
-const search = new Search(view);
+const search = new Search(view, log, api);
+
 
 
 const app = new App(view, search);

@@ -5,10 +5,15 @@ export class View {
         this.title = this.createElement('h1', 'title');
         this.title.textContent = 'Github Search Users';
 
+
+        this.searchBlock = this.createElement('div', 'search');
         this.searchForm = this.createElement('form', 'form');
         this.searchInput = this.createElement('input', 'input');
         this.searchInput.placeholder = 'Write user name...';
+        this.counter = this.createElement('span', 'counter');
         this.searchForm.append(this.searchInput);
+        this.searchBlock.append(this.searchForm);
+        this.searchBlock.append(this.counter);
 
 
         this.main = this.createElement('div', 'main');
@@ -17,6 +22,7 @@ export class View {
         this.usersList = this.createElement('ul', 'users-list');
         this.userLoadMoreBtn = this.createElement('button', 'button');
         this.userLoadMoreBtn.textContent = 'Load More';
+        this.userLoadMoreBtn.style.display = 'none';
         this.users.append(this.usersList);
         this.users.append(this.userLoadMoreBtn);
 
@@ -26,7 +32,7 @@ export class View {
         this.main.append(this.userInfo);
 
         this.app.append(this.title);
-        this.app.append(this.searchForm);
+        this.app.append(this.searchBlock);
         this.app.append(this.main);
     }
 
@@ -40,7 +46,7 @@ export class View {
 
     createPrevUser(userData) {
         const userPrev = this.createElement('li', 'user-small');
-        userPrev.addEventListener('click', this.showUserData);
+        userPrev.addEventListener('click', ()=> this.showUserData(userData));
 
         userPrev.innerHTML = `<img src="${userData.avatar_url}" alt="${userData.login}">
                             <span>${userData.login}</span>`;
@@ -49,7 +55,31 @@ export class View {
 
     }
 
-    showUserData() {
+    showUserData(data) {
+        const user = this.createElement('div', 'user');
+
+
+        user.innerHTML = `<img src="${data.avatar_url} alt="${data.login}">`;
+
+
+        this.userInfo.append(user);
+
+
 
     }
+
+    toggleViewUserLoadMoreBtn(isShow) {
+        this.userLoadMoreBtn.style.display = isShow ? 'inline-block' : 'none';
+    }
+
+    showCountMessage(message) {
+        this.counter.textContent = message;
+    }
+
+    clearList() {
+        this.usersList.innerHTML = '';
+        this.counter.textContent = '';
+        this.toggleViewUserLoadMoreBtn(false);
+    }
+
 }
